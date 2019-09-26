@@ -1,0 +1,25 @@
+1.
+    Esquema MAC (Message Autentication Code):
+    O esquema MAC assegura a Autenticidade. 
+    É um esquema de natureza da chave Simetrico.
+
+    Esquema Assinatura Digital:
+    O esquema Assinatura Digital assegura a Confidencialidade.
+    É um esquema de natureza de chave Assimetrica.
+
+    A escolha do esquema depende da intenção de envio da mensagem.
+    Se queremos enviar a mensagem e garantir que não é alterada por terceiros, então devemos escolher o esquema MAC. No entanto, a mensagem é livre de ser lida.
+    Se queremos enviar a mensagem e garantir que não consegue ser lida por terceiros, então devemos escolher o esquema Assinatura Digital. No entanto, a mensagem é livre de ser alterada sem haver forma de detetar a sua alteração.
+
+2.
+    Dado: M = [HELL][OWOR][LD!I][SEL!] (HELLOWORLD!ISEL!)
+    Temos: k = 4; b = 4;
+    H(M) = Y4 = Ep(LD!I)(SEL!)
+
+    Dado: M' = [JFQI][ACIR][LD!I][SEL!] (JFQIACIRLD!ISEL!)
+    Temos: k = 4; b = 4;
+    H(M') = Y4 = Ep(LD!I)(SEL!)
+
+    Então: M != M' && H(M) == H(M')
+    Logo, para mensagens diferentes, são gerados as mesmas hashes.
+    Basta obter os ultimos dois blocos da mensagem para criar hashes iguais com mensagens diferentes.
