@@ -1,0 +1,2 @@
+-m decipher -f "/home/jpmatos/Documents/SI/Serie1/repo/destfile" -fd "/home/jpmatos/Documents/SI/Serie1/repo/decryptdestfile" -k "/home/jpmatos/Documents/SI/Serie1/repo/metafile" -c "/home/jpmatos/Documents/SI/Serie1/repo/certificates-keys/pfx/Alice_1.pfx" -p changeit
+-m cipher -f "/home/jpmatos/Documents/SI/Serie1/repo/testfile.txt" -fd "/home/jpmatos/Documents/SI/Serie1/repo/decryptdestfile" -k "/home/jpmatos/Documents/SI/Serie1/repo/metafile" -c "/home/jpmatos/Documents/SI/Serie1/repo/certificates-keys/cert-end.entities/Alice_1.cer"
