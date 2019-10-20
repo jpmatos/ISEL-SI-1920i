@@ -1,0 +1,19 @@
+3
+Uma forma de atacar uma implementação de um esquema de cifra assimétrica com o algoritmo de cifra apresentado, é intercetando o pedido
+de chave pública que X pede a Y, fazendo assim com que seja devolvido para X a chave pública que nós temos e que irá ajudar a atacar a mensagem.
+Com este sucedido, X vai pensar que tem a chave de Y e realizar a encriptação da sua messagem que irá de seguida enviar. Com isto a acontecer,
+iremos então intercetar a mensagem enviada juntamente com a nossa chave privada e conseguindo então assim interpretar a mensagem que deveria
+chegar a Y.
+
+4
+Os criptogramas produzidos pelo A são mais díficeis de criptoanalisar devido à enorme quantidade de tempo que seria necessário para cifrar e
+decifrar, para além que são muito mais vulneráveis que o AES, como o DES tem apenas chaves com 56 bits, faz com que o sistema demore mais tempo
+na sua análise fazendo igualmente o processo mais lento. No entanto os criptogramas de B são melhores devido à quantidade maior de bits 
+a serem usados nas suas chaves.
+
+5.
+
+
+
+6.
+A resistência à segunda pré-imagem de uma função hash contribui a garantir a autenticidade da chave pública de um certificado, porque 
