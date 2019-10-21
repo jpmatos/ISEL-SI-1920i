@@ -16,4 +16,12 @@ a serem usados nas suas chaves.
 
 
 6.
-A resistência à segunda pré-imagem de uma função hash contribui a garantir a autenticidade da chave pública de um certificado, porque 
+6.1 A resistência à segunda pré-imagem de uma função hash contribui a garantir a autenticidade da chave pública de um certificado, porque 
+dada uma mensagem que seja recebida, é difícil de encontrar outra em que o hash da primeira seja igual ao da segunda. Caso isto não se 
+suceda, ficam muito vulneráveis a ataques de segunda pré-imagem. Conseguindo este ataque, basta descobrir a hash e saber que será sempre
+coeso mediante a mensagem, que podem fazer os ataques à vontade porque já é de conhecimento o código hash.
+
+
+6.2 As chaves privadas dos intermédios são usadas para validar o certificado C, no exemplo de uma empresa, tendo o certificado C como um
+como o certificado principal do domínio, irá depois ser o principal na hierarquia da corrente, o que irá fazer com que os intermédios 
+abaixo são inseridos como seguros, sendo eles validados com o certificado "mãe" dizendo que são seguros no domínio.
