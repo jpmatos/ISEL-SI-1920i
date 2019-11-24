@@ -1,0 +1,30 @@
+6.
+    i)
+    Ao fazer um pedido HTTP ao servidor, sem qualquer configuração, obtemos o seguinte resultado:
+    curl localhost:4433
+    curl: (52) Empty reply from server
+
+    No browser obtemos:
+    The connection was reset
+    The connection to the server was reset while the page was loading.
+
+    De seguida, os seguintes passos foram realizados:
+    - Conversão do ficheiro 'secure-server.pfx' para o ficheiro 'secure-server-pfx.pem' com openssl, atráves do comando:
+    "openssl pkcs12 -in secure-server.pfx -out secure-server-pfx.pem -nodes -nocerts"
+    - Conversão do ficheiro 'secure-server.cer' para o fichero 'secure-server-cer.pem' com openssl, atráves do comando:
+    "openssl x509 -inform der -in secure-server.cer -out secure-server-cer.pem"
+    - Conversão do ficheiro 'CA1-int.cer' para o ficheiro 'CA1-int-cer.pem' com openssl, atráves do comando:
+    "openssl x509 -inform der -in CA1-int.cer -out CA1-int-cer.pem"
+
+    - Copia do conteudo do ficheiro 'CA1-int-cer.pem' para o ficheiro 'secure-server-cer.pem'.
+    Isto faz com que o certificado carregado pelo servidor tenha o certificado intermedio.
+    - Carregamento do ficheiro 'CA1.cer' no Firefox.
+    Isto faz com que o Firefox confie nos certificados emitidos por CA1.
+
+    -Configuração do 'server-template.js' para carregar em 'key' a chave em 'secure-server-pfx.pem'.
+    -Configuração do 'server-template.js' para carregar em 'cert' o certificado em 'secure-server-cer.pem'.
+    
+    -Configuração do ficheiro 'hosts' do sistema, para que o endereço 'https://secure-server.edu' seja resolvido para 'localhost'.
+
+    Após estes passos, ao aceder ao link 'https://secure-server.edu:4433' no browser, obtemos a resposta:
+    "Secure Hello World with node.js"
