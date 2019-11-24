@@ -1,17 +1,25 @@
 'use strict'
 
 const express = require('express')
-const app = express()
-const request = require('request');
-const jwt = require('jsonwebtoken');
+const session = require('express-session');
+const request = require('request')
+const jwt = require('jsonwebtoken')
+const uuid = require('uuid4')
+const cookieParser = require('cookie-parser')
+const exphbs  = require('express-handlebars');
 
 const webApi = require('./web-api/web-api')
-const tmaController = require('./web-api/controller/tmaController').init()
-const googleController = require('./web-api/controller/googleController').init(request, jwt)
-const githubController = require('./web-api/controller/githubController').init()
-
+const tokenHandler = require('./util/token-handler').init()
+const tmaController = require('./web-api/controller/tma-controller').init(tokenHandler)
+const googleController = require('./web-api/controller/google-controller').init(request, jwt, uuid, tokenHandler)
+const githubController = require('./web-api/controller/github-controller').init()
 const port = 3001
 
+const app = express()
+app.engine('hbs', exphbs({defaultLayout: 'main', extname: '.hbs'}));
+app.set('view engine', 'hbs');
+app.use(cookieParser())
+app.use(session({secret: uuid()}))
 app.use('/', webApi(express.Router(), tmaController, googleController, githubController))
 
 app.listen(port, (err) => {
