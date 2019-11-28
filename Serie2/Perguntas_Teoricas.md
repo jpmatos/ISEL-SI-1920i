@@ -14,4 +14,9 @@ Uma aplicação web para garantir a autenticidade dos cookies que usa para mante
 4
 4.1- O parâmetro scope tem como objectivo limitar o acesso que uma aplicação tem à conta do utilizador, deixando o próprio definir o poder que a aplicação tem para ver a conta do mesmo.
 
-4.2-
+4.2- Não, no browser o que existe é um code temporário enviado por um identity provider que trabalha a autenticação do utilizador na aplicação web. O client_secret e o client_id são apenas trocados entre o replying party e o identity provider juntamente com o code para que ele receba o token de autorização, deixando assim o secret e o id em segurança e não serem obtidos.
+
+4.3- Neste contexto, a aplicação não recebe qualquer identidade do cliente, após a autorização da aplicação é criado um token de acesso referente ao cliente que irá servir para o próprio ser autenticado sempre que for aceder à aplicação.
+
+5
+Um ID_Token serve para ser usado em eventos de autenticação e identificação de utilizadores, é usado para uma autenticação baseada em tokens que guarda a informação do utilizador e providencia à aplicação as preferências do utilizador. A aplicação só recebe um ID Token após o utilizador ter feito um login com sucesso, que com esse mesmo token consegue aceder às informações do mesmo, como por exemplo, nome e email. Um exemplo disto será quando fazemos um registo com sucesso e queremos mandar depois um email automático ao utilizador a dizer que se registou com sucesso.
