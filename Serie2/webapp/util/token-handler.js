@@ -7,14 +7,22 @@ module.exports = class tokenHandler {
     }
 
     static init(){
-        return new tokenHandler()   
+        return new tokenHandler()
     }
 
     get(session){
         return this.tokens[session]
     }
 
-    add(session, token){
-        this.tokens[session] = token
+    addGoogle(session, googleToken){
+        if(this.tokens[session] == undefined)
+            this.tokens[session] = new Object()
+        this.tokens[session].google = googleToken
+    }
+
+    addGithub(session, githubToken){
+        if(this.tokens[session] == undefined)
+            this.tokens[session] = new Object()
+        this.tokens[session].github = githubToken
     }
 }

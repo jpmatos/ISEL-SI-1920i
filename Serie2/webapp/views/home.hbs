@@ -1,5 +1,7 @@
-{{#if token}}
-    <div> Olá <b>{{token.email}}</b> </div>
+{{#if token.google}}
+    <div> Olá <b>{{token.google.email}}</b> </div>
 {{else}}
-    <a href=/login>Use Google Account</a>
+    <a href=/login/google>Use Google Account</a>
 {{/if}}
+
+<a href=/login/github>Use Github Account</a>

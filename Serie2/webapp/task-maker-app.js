@@ -12,7 +12,7 @@ const webApi = require('./web-api/web-api')
 const tokenHandler = require('./util/token-handler').init()
 const tmaController = require('./web-api/controller/tma-controller').init(tokenHandler)
 const googleController = require('./web-api/controller/google-controller').init(request, jwt, uuid, tokenHandler)
-const githubController = require('./web-api/controller/github-controller').init()
+const githubController = require('./web-api/controller/github-controller').init(request, jwt, uuid, tokenHandler)
 const port = 3001
 
 const app = express()

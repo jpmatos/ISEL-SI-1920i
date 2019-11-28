@@ -69,20 +69,9 @@ module.exports = class googleController {
                         // decode does not check signature
                         var jwt_payload = this.jwt.decode(json_response.id_token)
 
-                        this.tokenHandler.add(req.session.id, jwt_payload)
+                        this.tokenHandler.addGoogle(req.session.id, jwt_payload)
 
                         res.redirect('/')
-
-                        // console.log(body)
-                        // console.log(jwt_payload)
-
-                        // res.send(
-                        //     // send code and id_token to user-agent, *just* for this demo
-                        //       '<div> callback with code = ' + req.query.code + '</div>'
-                        //     + '<div> id_token = ' + json_response.id_token + '</div>'
-                        //     // use 'email' claim from id_token
-                        //     + '<div> Olá <b>' + jwt_payload.email + '</b> </div>'
-                        // )
                     }.bind(this)
                 )
         }
