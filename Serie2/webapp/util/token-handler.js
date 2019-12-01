@@ -10,19 +10,19 @@ module.exports = class tokenHandler {
         return new tokenHandler()
     }
 
-    get(session){
-        return this.tokens[session]
+    get(cookie){
+        return this.tokens[cookie]
     }
 
-    addGoogle(session, googleToken){
-        if(this.tokens[session] == undefined)
-            this.tokens[session] = new Object()
-        this.tokens[session].google = googleToken
+    addGoogle(cookie, googleToken){
+        if(this.tokens[cookie] == undefined)
+            this.tokens[cookie] = new Object()
+        this.tokens[cookie].google = googleToken
     }
 
-    addGithub(session, githubToken){
-        if(this.tokens[session] == undefined)
-            this.tokens[session] = new Object()
-        this.tokens[session].github = githubToken
+    addGithub(cookie, githubToken){
+        if(this.tokens[cookie] == undefined)
+            this.tokens[cookie] = new Object()
+        this.tokens[cookie].github = githubToken
     }
 }

@@ -1,0 +1,15 @@
+<a href='/'>Home</a>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Text</th>
+    </tr>
+    {{#each issues}}
+    <tr>
+        <th>{{this.title}}</th>
+        <th>{{this.state}}</th>
+        <th>{{this.body}}</th>
+    </tr>
+    {{/each}}
+</table>

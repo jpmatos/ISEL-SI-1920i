@@ -1,73 +1,44 @@
 'use strict'
 
-const CLIENT_ID_GITHUB = '96bc24f89efc2c0b8ea1'
-const CLIENT_SECRET_GITHUB = '3aa7fb85296b300d70d22fdd7862f5367e204081'
-
 module.exports = class githubController {
 
-    constructor(request, jwt, uuid, tokenHandler){
-        this.request = request
-        this.jwt = jwt
-        this.uuid = uuid
+    constructor(githubService, tokenHandler){
         this.tokenHandler = tokenHandler
-        this.sessionKey = new Object()
+        this.githubService = githubService
     }
 
-    static init(request, jwt, uuid, tokenHandler){
-        return new githubController(request, jwt, uuid, tokenHandler)
+    static init(githubService, tokenHandler){
+        return new githubController(githubService, tokenHandler)
     }
 
     login(req, res, next){
-        var key = req.cookies.key
-        if(key == 'undefined'){
-            key = this.uuid()
-            res.cookie('key', key)
-        }
-        this.sessionKey[req.session.id] = key
-        res.redirect(302,
-            'https://github.com/login/oauth/authorize?' + 
-            '&client_id=' + CLIENT_ID_GITHUB +
-            '&scope=repo' +
-            '&state=' + key +
-            '&redirect_uri=http://localhost.mydomain.com:3001/githubcallback')
+        this.githubService.redirect(req, res, (str) => {
+            res.redirect(302, str)
+        })
     }
 
     callback(req, res, next){
-        var key = req.cookies.key
-        if(key == this.sessionKey[req.session.id]){
+        var validKey = req.cookies.validKey
+        var state = req.query.state
+        if(validKey == state){
+            res.clearCookie('validKey');
             console.log('making request to token endpoint')
-            this.request
-                .post(
-                    {
-                        url: 'https://github.com/login/oauth/access_token',
-                        headers: {
-                            accept: 'application/json'
-                        },
-                        form: {
-                            code: req.query.code,
-                            client_id: CLIENT_ID_GITHUB,
-                            client_secret: CLIENT_SECRET_GITHUB,
-                            redirect_uri: 'http://localhost.mydomain.com:3001/githubcallback',
-                            grant_type: 'authorization_code'
-                        }
-                    },
-                    function(err, httpResponse, body){
-                        //
-                        // TODO: check err and httpresponse
-                        //
-
-                        var json_response = JSON.parse(body)
-                        // decode does not check signature
-                        var jwt_payload = this.jwt.decode(json_response.access_token)
-
-                        this.tokenHandler.addGithub(req.session.id, jwt_payload)
-
-                        res.redirect('/')
-                    }.bind(this)
-                )
+            this.githubService.requestToken(req, res, (key, token) => {
+                this.tokenHandler.addGithub(key, token)
+                res.redirect('/')
+            })
         }
         else{
             //TODO Handle session-key mismatch
         }
+    }
+
+    issues(req, res, next){
+        var token = this.tokenHandler.get(req.cookies.key).github
+        var repo = req.query.repo
+
+        this.githubService.getIssues(req, res, repo, token, (issues) => {
+            res.render('issues', {'issues': issues})
+        })
     }
 }

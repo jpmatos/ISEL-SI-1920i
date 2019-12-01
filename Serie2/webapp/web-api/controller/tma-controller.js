@@ -2,16 +2,17 @@
 
 module.exports = class tmaController {
 
-    constructor(tokenHandler) {
+    constructor(request, tokenHandler) {
+        this.request = request
         this.tokenHandler = tokenHandler
     }
 
-    static init(tokenHandler){
-        return new tmaController(tokenHandler)
+    static init(request, tokenHandler){
+        return new tmaController(request, tokenHandler)
     }
 
     home(req, res, next){
-        var token = this.tokenHandler.get(req.session.id);
+        var token = this.tokenHandler.get(req.cookies.key);
         res.render('home', {'token': token})
     }
 }

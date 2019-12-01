@@ -18,9 +18,8 @@ module.exports = class googleController {
     }
 
     login(req, res, next){
-        var key = this.uuid();
-        res.cookie('key', key)
-        this.sessionKey[req.session.id] = key
+        var validKey = this.uuid();
+        res.cookie('validKey', validKey)
         res.redirect(302,
             // authorization endpoint
             'https://accounts.google.com/o/oauth2/v2/auth?'
@@ -32,7 +31,7 @@ module.exports = class googleController {
             + 'scope=openid%20email&'
             
             // parameter state should bind the user's session to a request/response
-            + `state=${key}&`
+            + `state=${validKey}&`
             
             // responde_type for "authorization code grant"
             + 'response_type=code&'
@@ -42,8 +41,10 @@ module.exports = class googleController {
     }
 
     callback(req, res, next){
-        var key = req.cookies.key
-        if(key == this.sessionKey[req.session.id]){
+        var validKey = req.cookies.validKey
+        var state = req.query.state
+        if(validKey == state){
+            res.clearCookie('validKey');
             console.log('making request to token endpoint')
             // https://www.npmjs.com/package/request#examples
             // content-type: application/x-www-form-urlencoded (URL-Encoded Forms)
@@ -69,7 +70,12 @@ module.exports = class googleController {
                         // decode does not check signature
                         var jwt_payload = this.jwt.decode(json_response.id_token)
 
-                        this.tokenHandler.addGoogle(req.session.id, jwt_payload)
+                        var key = req.cookies.key
+                        if(key == undefined){
+                            key = this.uuid()
+                            res.cookie('key', key)
+                        }
+                        this.tokenHandler.addGoogle(key, jwt_payload)
 
                         res.redirect('/')
                     }.bind(this)

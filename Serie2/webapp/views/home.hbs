@@ -4,4 +4,16 @@
     <a href=/login/google>Use Google Account</a>
 {{/if}}
 
-<a href=/login/github>Use Github Account</a>
+{{#if token.github}}
+    <input type="text" id="repo">
+    <a href="/issues?repo=" id="issues" onclick="getRepo()">Issues</a>
+    <script>
+        function getRepo(){
+            var repo = document.getElementById('repo').value
+            document.getElementById('issues').href += repo
+            return true
+        }
+    </script>
+{{else}}
+    <a href=/login/github>Use Github Account</a>
+{{/if}}
