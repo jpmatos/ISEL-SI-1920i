@@ -2,36 +2,22 @@
 
 module.exports = class GithubData {
 
-    constructor(uuid){
-        this.uuid = uuid
+    constructor(){
+
     }
 
-    static init(uuid){
-        return new GithubData(uuid)
+    static init(){
+        return new GithubData()
     }
 
-    authenticate(res, key, cb){
+    authenticate(cb){
         return function (err, httpResponse, body) {
             //
             // TODO: check err and httpresponse
             //
-            if(key == undefined){
-                key = this.uuid()
-                res.cookie('key', key)
-            }
             var json_response = JSON.parse(body)
-            cb(key, json_response.access_token)
+            cb(json_response.access_token)
         }
-    }
-
-    redirect(res, id, cb){
-        var validKey = this.uuid();
-        res.cookie('validKey', validKey)
-        cb('https://github.com/login/oauth/authorize?' + 
-           '&client_id=' + id +
-           '&scope=repo' +
-           '&state=' + validKey +
-           '&redirect_uri=http://localhost.mydomain.com:3001/githubcallback')
     }
 
     requestIssues(cb){

@@ -1,18 +1,21 @@
 'use strict'
 
-module.exports = class githubController {
+module.exports = class GithubController {
 
-    constructor(githubService, tokenHandler){
+    constructor(githubService, tokenHandler, uuid){
         this.tokenHandler = tokenHandler
         this.githubService = githubService
+        this.uuid = uuid
     }
 
-    static init(githubService, tokenHandler){
-        return new githubController(githubService, tokenHandler)
+    static init(githubService, tokenHandler, uuid){
+        return new GithubController(githubService, tokenHandler, uuid)
     }
 
     login(req, res, next){
-        this.githubService.redirect(req, res, (str) => {
+        var validKey = this.uuid();
+        this.githubService.redirect(validKey, (str) => {
+            res.cookie('validKey', validKey)
             res.redirect(302, str)
         })
     }
@@ -23,7 +26,12 @@ module.exports = class githubController {
         if(validKey == state){
             res.clearCookie('validKey');
             console.log('making request to token endpoint')
-            this.githubService.requestToken(req, res, (key, token) => {
+            this.githubService.requestToken(req.query.code, (token) => {
+                var key = req.cookies.key
+                if(key == undefined){
+                    key = this.uuid()
+                    res.cookie('key', key)
+                }
                 this.tokenHandler.addGithub(key, token)
                 res.redirect('/')
             })

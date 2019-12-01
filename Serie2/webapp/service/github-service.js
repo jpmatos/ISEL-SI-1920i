@@ -3,7 +3,7 @@
 const CLIENT_ID_GITHUB = '96bc24f89efc2c0b8ea1'
 const CLIENT_SECRET_GITHUB = '3aa7fb85296b300d70d22fdd7862f5367e204081'
 
-module.exports = class githubService{
+module.exports = class GithubService{
 
     constructor(githubData, request){
         this.githubData = githubData
@@ -11,28 +11,32 @@ module.exports = class githubService{
     }
 
     static init(githubData, request){
-        return new githubService(githubData, request)
+        return new GithubService(githubData, request)
     }
 
-    requestToken(req, res, cb){
+    redirect(validKey, cb){
+        cb('https://github.com/login/oauth/authorize?' + 
+           '&client_id=' + CLIENT_ID_GITHUB +
+           '&scope=repo' +
+           '&state=' + validKey +
+           '&redirect_uri=http://localhost.mydomain.com:3001/githubcallback')
+    }
+
+    requestToken(queryCode, cb){
         var options = {
             url: 'https://github.com/login/oauth/access_token',
             headers: {
                 accept: 'application/json'
             },
             form: {
-                code: req.query.code,
+                code: queryCode,
                 client_id: CLIENT_ID_GITHUB,
                 client_secret: CLIENT_SECRET_GITHUB,
                 redirect_uri: 'http://localhost.mydomain.com:3001/githubcallback',
                 grant_type: 'authorization_code'
             }
         }
-        this.request.post(options, this.githubData.authenticate(res, req.cookies.key, cb))
-    }
-
-    redirect(req, res, cb){
-        this.githubData.redirect(res, CLIENT_ID_GITHUB, cb)
+        this.request.post(options, this.githubData.authenticate(cb))
     }
 
     getIssues(req, res, repo, token, cb){
