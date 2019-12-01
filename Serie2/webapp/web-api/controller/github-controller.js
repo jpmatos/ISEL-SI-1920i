@@ -42,11 +42,12 @@ module.exports = class GithubController {
     }
 
     issues(req, res, next){
-        var token = this.tokenHandler.get(req.cookies.key).github
+        var githubToken = this.tokenHandler.get(req.cookies.key).github
+        var googleToken = this.tokenHandler.get(req.cookies.key).google
         var repo = req.query.repo
 
-        this.githubService.getIssues(req, res, repo, token, (issues) => {
-            res.render('issues', {'issues': issues})
+        this.githubService.getIssues(repo, githubToken, (issues) => {
+            res.render('issues', {'issues': issues, 'googleToken': googleToken})
         })
     }
 }

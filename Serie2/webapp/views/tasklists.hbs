@@ -1,0 +1,11 @@
+<div>Pick a Task List</div>
+<table>
+    <tr>
+        <th>Name</th>
+    </tr>
+    {{#each lists}}
+    <tr>
+        <th><a href="/createtask?title={{../issueInfo.title}}&state={{../issueInfo.state}}&body={{../issueInfo.body}}&tasklist={{this.id}}">{{this.title}}</a></th>
+    </tr>
+    {{/each}}
+</table>

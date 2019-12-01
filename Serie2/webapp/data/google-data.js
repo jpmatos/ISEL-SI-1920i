@@ -18,7 +18,21 @@ module.exports = class GoogleData{
             var json_response = JSON.parse(body)
             // decode does not check signature
             var jwt_payload = this.jwt.decode(json_response.id_token)
-            cb(jwt_payload)
+            cb(json_response.access_token)
         }.bind(this)
+    }
+
+    listTasks(cb){
+        return function(err, httResponse, body){
+            var lists = JSON.parse(body)
+            cb(lists)
+        }
+    }
+
+    createTask(cb){
+        return function(err, httResponse, body){
+            //var resp = JSON.parse(body)
+            cb()
+        }
     }
 }

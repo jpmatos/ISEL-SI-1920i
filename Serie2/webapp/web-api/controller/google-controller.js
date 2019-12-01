@@ -42,4 +42,33 @@ module.exports = class GoogleController {
             //TODO Handle session-key mismatch
         }
     }
+
+    listTasklists(req, res, next){
+        var token = this.tokenHandler.get(req.cookies.key).google
+        // var tasklist = req.query.tasklist
+        var issueInfo = {
+            'title': req.query.title,
+            'state': req.query.state,
+            'body': req.query.body 
+        }
+
+        this.googleService.listTasklists(token, (tasklists) => {
+            res.render('tasklists', {'lists': tasklists.items, 'issueInfo': issueInfo})
+        })
+    }
+
+    createTask(req, res, next){
+        var token = this.tokenHandler.get(req.cookies.key).google
+        var taskId = req.query.tasklist
+        // var tasklist = req.query.tasklist
+        var issueInfo = {
+            'title': req.query.title,
+            'state': req.query.state,
+            'body': req.query.body 
+        }
+
+        this.googleService.createTask(token, taskId, issueInfo, () =>{
+            res.render('task')
+        })
+    }
 }

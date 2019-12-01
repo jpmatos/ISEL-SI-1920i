@@ -1,15 +1,32 @@
-<a href='/'>Home</a>
+<div><a href='/'>Home</a></div>
+<br>
+{{!-- {{#if googleToken}}
+    <div>Task List:</div>
+    <input type="text" id="tasklistinput">
+    <script>
+        function getTasklist(){
+            var tasklist = document.getElementById('tasklistinput').value
+            document.getElementById('taskClick').href += "&tasklist=" + tasklist
+            return true
+        }
+    </script>
+{{/if}} --}}
 <table>
     <tr>
         <th>Title</th>
         <th>Status</th>
-        <th>Text</th>
+        <th>Body</th>
     </tr>
     {{#each issues}}
-    <tr>
-        <th>{{this.title}}</th>
-        <th>{{this.state}}</th>
-        <th>{{this.body}}</th>
-    </tr>
+    {{#if this.title}}
+        <tr>
+            <th>{{this.title}}</th> 
+            <th>{{this.state}}</th>
+            <th>{{this.body}}</th>
+            {{#if ../googleToken}}
+                <th><a href="/tasklists?title={{this.title}}&state={{this.state}}&body={{this.body}}">Create Task</a></th>
+            {{/if}}
+        </tr>
+    {{/if}}
     {{/each}}
 </table>
